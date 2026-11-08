@@ -56,7 +56,7 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 
 <button onclick="login()">دخول</button>
 
-<p class="small">المدير: 1234 | الكاشير: 0000</p>
+<p class="small">المدير: 1234 | الكاشير: 0000 (أول استخدام فقط)</p>
 </section>
 
 <section id="app" class="hidden">
@@ -73,11 +73,11 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 <button onclick="show('history')">الفواتير</button>
 <button id="navReports" onclick="show('reports')">التقارير</button>
 <button id="navSettings" onclick="show('settings')">الإعدادات</button>
+<button onclick="show('passwordPage')">حسابي وتغيير كلمة المرور</button>
 </nav>
 
 <section id="dashboard" class="card page hidden">
 <h2>لوحة التحكم</h2>
-
 <div class="stats">
 <div class="stat">إجمالي المبيعات<strong id="total">0</strong></div>
 <div class="stat">عدد الفواتير<strong id="count">0</strong></div>
@@ -88,29 +88,23 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 
 <section id="products" class="card page hidden">
 <h2>إدارة المنتجات</h2>
-
 <div id="addProduct">
 <input id="pname" placeholder="اسم المنتج">
 <input id="pcost" type="number" min="0" placeholder="سعر الشراء">
 <input id="pprice" type="number" min="0" placeholder="سعر البيع">
 <input id="pqty" type="number" min="0" placeholder="الكمية">
-
 <button onclick="addProduct()">إضافة منتج</button>
 </div>
-
 <h3>قائمة المخزون</h3>
 <div id="productList"></div>
 </section>
 
 <section id="sales" class="card page hidden">
 <h2>فاتورة بيع جديدة</h2>
-
 <label>اختار المنتج</label>
 <select id="productSelect"></select>
-
 <label>الكمية</label>
 <input id="saleQty" type="number" min="1" value="1">
-
 <label>طريقة الدفع</label>
 <select id="payment">
 <option>نقدي</option>
@@ -118,9 +112,7 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 <option>محفظة إلكترونية</option>
 <option>إنستا باي</option>
 </select>
-
 <button onclick="sell()">إتمام البيع</button>
-
 <p id="saleMessage"></p>
 </section>
 
@@ -131,7 +123,6 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 
 <section id="reports" class="card page hidden">
 <h2>التقارير</h2>
-
 <p>المبيعات: <strong id="rTotal">0</strong> جنيه</p>
 <p>التكلفة: <strong id="rCost">0</strong> جنيه</p>
 <p>الربح: <strong id="rProfit">0</strong> جنيه</p>
@@ -139,10 +130,22 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 
 <section id="settings" class="card page hidden">
 <h2>الإعدادات</h2>
-
 <button onclick="exportData()">تحميل نسخة احتياطية</button>
-
 <p class="small">احتفظ بنسخة احتياطية من بياناتك بانتظام.</p>
+</section>
+
+<section id="passwordPage" class="card page hidden">
+<h2>حسابي وتغيير كلمة المرور</h2>
+
+<p id="accountName"></p>
+
+<input id="oldPin" type="password" placeholder="الرقم السري الحالي">
+<input id="newPin" type="password" placeholder="الرقم السري الجديد">
+<input id="confirmPin" type="password" placeholder="تأكيد الرقم السري الجديد">
+
+<button onclick="changePassword()">حفظ كلمة المرور الجديدة</button>
+
+<p class="small">استخدم رقمًا سريًا جديدًا من 4 أرقام على الأقل.</p>
 </section>
 
 </section>
@@ -155,11 +158,17 @@ let sales=JSON.parse(localStorage.getItem('giftora_sales')||'[]');
 
 let currentRole='';
 
+let passwords=JSON.parse(
+ localStorage.getItem('giftora_passwords')||
+ '{"manager":"1234","cashier":"0000"}'
+);
+
 const money=n=>(Number(n)||0).toFixed(2);
 
 function save(){
  localStorage.setItem('giftora_products',JSON.stringify(products));
  localStorage.setItem('giftora_sales',JSON.stringify(sales));
+ localStorage.setItem('giftora_passwords',JSON.stringify(passwords));
 }
 
 // تسجيل الدخول
@@ -168,8 +177,7 @@ function login(){
  const role=document.getElementById('role').value;
  const pin=document.getElementById('pin').value;
 
- if((role==='manager'&&pin==='1234')||
-    (role==='cashier'&&pin==='0000')){
+ if(pin===passwords[role]){
 
   currentRole=role;
 
@@ -178,6 +186,9 @@ function login(){
 
   document.getElementById('welcome').textContent=
    role==='manager'?'أهلاً مدير Giftora':'أهلاً كاشير Giftora';
+
+  document.getElementById('accountName').textContent=
+   role==='manager'?'الحساب الحالي: مدير الفرع':'الحساب الحالي: كاشير';
 
   document.getElementById('navDashboard').style.display=
    role==='manager'?'block':'none';
@@ -195,12 +206,53 @@ function login(){
    role==='manager'?'block':'none';
 
   refresh();
-
   show(role==='manager'?'dashboard':'sales');
 
  }else{
   alert('الرقم السري غير صحيح');
  }
+}
+
+// تغيير كلمة المرور
+function changePassword(){
+
+ if(!currentRole){
+  alert('سجل الدخول أولاً');
+  return;
+ }
+
+ const oldPin=document.getElementById('oldPin').value;
+ const newPin=document.getElementById('newPin').value;
+ const confirmPin=document.getElementById('confirmPin').value;
+
+ if(oldPin!==passwords[currentRole]){
+  alert('الرقم السري الحالي غير صحيح');
+  return;
+ }
+
+ if(!/^\d{4,12}$/.test(newPin)){
+  alert('الرقم السري يجب أن يكون من 4 إلى 12 رقمًا');
+  return;
+ }
+
+ if(newPin===oldPin){
+  alert('اختار رقمًا سريًا مختلفًا عن القديم');
+  return;
+ }
+
+ if(newPin!==confirmPin){
+  alert('تأكيد الرقم السري غير مطابق');
+  return;
+ }
+
+ passwords[currentRole]=newPin;
+ save();
+
+ document.getElementById('oldPin').value='';
+ document.getElementById('newPin').value='';
+ document.getElementById('confirmPin').value='';
+
+ alert('تم تغيير الرقم السري بنجاح. استخدم الرقم الجديد في تسجيل الدخول القادم.');
 }
 
 // تسجيل الخروج
@@ -210,7 +262,6 @@ function logout(){
 
  document.getElementById('app').classList.add('hidden');
  document.getElementById('login').classList.remove('hidden');
-
  document.getElementById('pin').value='';
 
 }
@@ -221,7 +272,7 @@ function show(id){
  if(!currentRole)return;
 
  if(currentRole==='cashier'&&
-    !['sales','history'].includes(id)){
+    !['sales','history','passwordPage'].includes(id)){
 
   alert('غير مسموح للكاشير بالدخول لهذا القسم');
   return;
@@ -249,25 +300,14 @@ function addProduct(){
  const price=Number(document.getElementById('pprice').value);
  const qty=Number(document.getElementById('pqty').value);
 
- if(!name||
-    !Number.isFinite(cost)||
-    !Number.isFinite(price)||
-    !Number.isInteger(qty)||
-    cost<0||
-    price<=0||
-    qty<0){
+ if(!name||!Number.isFinite(cost)||!Number.isFinite(price)||
+    !Number.isInteger(qty)||cost<0||price<=0||qty<0){
 
   alert('راجع بيانات المنتج');
   return;
  }
 
- products.push({
-  id:Date.now(),
-  name,
-  cost,
-  price,
-  qty
- });
+ products.push({id:Date.now(),name,cost,price,qty});
 
  save();
 
@@ -276,11 +316,10 @@ function addProduct(){
  });
 
  refresh();
-
  alert('تم إضافة المنتج بنجاح');
 }
 
-// إضافة كمية جديدة للمخزون
+// إضافة كمية للمخزون
 function restockProduct(id){
 
  if(currentRole!=='manager'){
@@ -289,16 +328,12 @@ function restockProduct(id){
  }
 
  const product=products.find(p=>p.id===id);
-
- if(!product){
-  alert('المنتج غير موجود');
-  return;
- }
+ if(!product)return;
 
  const input=prompt(
   'المنتج: '+product.name+
   '\nالكمية الحالية: '+product.qty+
-  '\nاكتب الكمية الجديدة التي تريد إضافتها:'
+  '\nاكتب الكمية التي تريد إضافتها:'
  );
 
  if(input===null)return;
@@ -311,23 +346,16 @@ function restockProduct(id){
  }
 
  product.qty+=qty;
-
  save();
  refresh();
 
- alert(
-  'تمت إضافة '+qty+' قطعة بنجاح'+
-  '\nالكمية الجديدة في المخزون: '+product.qty
- );
+ alert('تمت إضافة الكمية بنجاح. المخزون الحالي: '+product.qty);
 }
 
 // إتمام البيع
 function sell(){
 
- if(currentRole!=='manager'&&currentRole!=='cashier'){
-  alert('سجل الدخول أولاً');
-  return;
- }
+ if(!currentRole)return;
 
  const id=Number(document.getElementById('productSelect').value);
  const qty=Number(document.getElementById('saleQty').value);
@@ -364,7 +392,6 @@ function sell(){
   'تم تسجيل البيع بنجاح - الإجمالي: '+money(p.price*qty)+' جنيه';
 
  document.getElementById('saleQty').value=1;
-
  refresh();
 }
 
@@ -374,15 +401,13 @@ function deleteProduct(id){
  if(currentRole!=='manager')return;
 
  if(confirm('هل تريد حذف المنتج؟')){
-
   products=products.filter(x=>x.id!==id);
-
   save();
   refresh();
  }
 }
 
-// تحديث البيانات المعروضة
+// تحديث البيانات
 function refresh(){
 
  const total=sales.reduce((a,s)=>a+s.total,0);
@@ -392,7 +417,6 @@ function refresh(){
  document.getElementById('total').textContent=money(total);
  document.getElementById('count').textContent=sales.length;
  document.getElementById('profit').textContent=money(profit);
-
  document.getElementById('stock').textContent=
   products.reduce((a,p)=>a+p.qty,0);
 
@@ -400,7 +424,6 @@ function refresh(){
  document.getElementById('rProfit').textContent=money(profit);
  document.getElementById('rCost').textContent=money(cost);
 
- // عرض المنتجات وأزرار المدير
  document.getElementById('productList').innerHTML=
   products.map(p=>
    `<div class="item">
@@ -408,19 +431,13 @@ function refresh(){
    سعر الشراء: ${money(p.cost)} جنيه<br>
    سعر البيع: ${money(p.price)} جنيه<br>
    الكمية الحالية: <b>${p.qty}</b> قطعة
-
    ${currentRole==='manager'?
-    `<button class="addStock" onclick="restockProduct(${p.id})">
-    + إضافة كمية للمخزون
-    </button>
-    <button class="danger" onclick="deleteProduct(${p.id})">
-    حذف المنتج
-    </button>`
+    `<button class="addStock" onclick="restockProduct(${p.id})">+ إضافة كمية للمخزون</button>
+    <button class="danger" onclick="deleteProduct(${p.id})">حذف المنتج</button>`
     :''}
    </div>`
   ).join('')||'لا توجد منتجات';
 
- // قائمة المنتجات المتاحة للبيع
  document.getElementById('productSelect').innerHTML=
   products.filter(p=>p.qty>0).map(p=>
    `<option value="${p.id}">
@@ -428,7 +445,6 @@ function refresh(){
    </option>`
   ).join('')||'<option value="">لا توجد منتجات متاحة</option>';
 
- // سجل الفواتير
  document.getElementById('historyList').innerHTML=
   [...sales].reverse().map(s=>
    `<div class="item">
@@ -439,7 +455,6 @@ function refresh(){
    <span class="small">${escapeHTML(s.date)}</span>
    </div>`
   ).join('')||'لا توجد مبيعات';
-
 }
 
 // حماية عرض النصوص
@@ -466,6 +481,7 @@ function exportData(){
  const data={
   products,
   sales,
+  passwords,
   exportedAt:new Date().toISOString()
  };
 
@@ -475,8 +491,8 @@ function exportData(){
  );
 
  const url=URL.createObjectURL(blob);
-
  const a=document.createElement('a');
+
  a.href=url;
  a.download='Giftora-Backup.json';
  a.click();
