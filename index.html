@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123B68">
+
 <link rel="manifest" href="./manifest.json">
+
+<title>Giftora POS</title>
 
 <script>
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js");
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("./service-worker.js");
+      console.log("Giftora Service Worker Registered");
+    } catch (error) {
+      console.error("Service Worker Error:", error);
+    }
   });
 }
 </script>
- <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#123B68">
