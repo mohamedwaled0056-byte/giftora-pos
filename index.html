@@ -11,27 +11,126 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif}
-header{background:#1b1b1b;padding:22px;text-align:center;border-bottom:2px solid #c9a34a}
-h1{color:#d6b45b;margin:0;font-size:30px}
-header p{color:#aaa;margin-bottom:0}
+
+body{
+ margin:0;
+ background:#EAF6FF;
+ color:#17324D;
+ font-family:Arial,sans-serif
+}
+
+header{
+ background:#123B68;
+ padding:22px;
+ text-align:center;
+ border-bottom:4px solid #65B9E8
+}
+
+h1{color:white;margin:0;font-size:30px}
+header p{color:#D7EEFF;margin-bottom:0}
+
 main{max-width:900px;margin:auto;padding:15px}
-.card{background:#202020;border:1px solid #444;border-radius:12px;padding:15px;margin:12px 0}
-h2,h3{color:#d6b45b}
-input,select,button{width:100%;padding:13px;margin:6px 0;border-radius:7px;font-size:15px}
-input,select{background:#292929;color:white;border:1px solid #555}
-button{background:#c9a34a;color:#111;border:0;font-weight:bold;cursor:pointer}
-.secondary{background:#444;color:white}
-.danger{background:#a33;color:white}
-.addStock{background:#26734d;color:white}
-nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat{background:#292929;padding:15px;border-radius:10px;text-align:center}
-.stat strong{display:block;color:#e3bd60;font-size:21px;margin-top:8px}
+
+.card{
+ background:white;
+ border:1px solid #B8DDF4;
+ border-radius:14px;
+ padding:15px;
+ margin:12px 0;
+ box-shadow:0 3px 12px rgba(18,59,104,.08)
+}
+
+h2,h3{color:#123B68}
+
+input,select,button{
+ width:100%;
+ padding:13px;
+ margin:6px 0;
+ border-radius:8px;
+ font-size:15px
+}
+
+input,select{
+ background:#F4FAFF;
+ color:#17324D;
+ border:1px solid #A9D3EE
+}
+
+button{
+ background:#65B9E8;
+ color:#123B68;
+ border:0;
+ font-weight:bold;
+ cursor:pointer
+}
+
+.secondary{background:#123B68;color:white}
+.danger{background:#C84B5A;color:white}
+.addStock{background:#269B83;color:white}
+
+nav{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:8px
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px
+}
+
+.stat{
+ background:#EAF6FF;
+ border:1px solid #C5E4F7;
+ padding:15px;
+ border-radius:10px;
+ text-align:center
+}
+
+.stat strong{
+ display:block;
+ color:#1676B8;
+ font-size:21px;
+ margin-top:8px
+}
+
 .hidden{display:none!important}
-.small{color:#aaa;font-size:12px}
-.item{padding:12px;border-bottom:1px solid #444;line-height:1.8}
-#saleMessage{color:#d6b45b;font-weight:bold}
+.small{color:#66839A;font-size:12px}
+
+.item{
+ padding:12px;
+ border-bottom:1px solid #D5EAF7;
+ line-height:1.8
+}
+
+/* ألوان مختلفة للمنتجات */
+#productList .item:nth-child(6n+1){
+ background:#EAF6FF;border-right:5px solid #2696D2;
+ border-radius:9px
+}
+#productList .item:nth-child(6n+2){
+ background:#EAF8F2;border-right:5px solid #36A878;
+ border-radius:9px
+}
+#productList .item:nth-child(6n+3){
+ background:#FFF4E8;border-right:5px solid #E99A42;
+ border-radius:9px
+}
+#productList .item:nth-child(6n+4){
+ background:#F5EEFF;border-right:5px solid #9870D5;
+ border-radius:9px
+}
+#productList .item:nth-child(6n+5){
+ background:#FFF0F3;border-right:5px solid #D96C91;
+ border-radius:9px
+}
+#productList .item:nth-child(6n+6){
+ background:#F0F5F8;border-right:5px solid #71899C;
+ border-radius:9px
+}
+
+#saleMessage{color:#1676B8;font-weight:bold}
 </style>
 </head>
 
