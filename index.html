@@ -23,6 +23,7 @@ input,select{background:#292929;color:white;border:1px solid #555}
 button{background:#c9a34a;color:#111;border:0;font-weight:bold;cursor:pointer}
 .secondary{background:#444;color:white}
 .danger{background:#a33;color:white}
+.addStock{background:#26734d;color:white}
 nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .stat{background:#292929;padding:15px;border-radius:10px;text-align:center}
@@ -97,6 +98,7 @@ nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 <button onclick="addProduct()">إضافة منتج</button>
 </div>
 
+<h3>قائمة المخزون</h3>
 <div id="productList"></div>
 </section>
 
@@ -166,8 +168,8 @@ function login(){
  const role=document.getElementById('role').value;
  const pin=document.getElementById('pin').value;
 
- if((role==='manager'&&pin==='782002')||
-    (role==='cashier'&&pin==='000')){
+ if((role==='manager'&&pin==='1234')||
+    (role==='cashier'&&pin==='0000')){
 
   currentRole=role;
 
@@ -177,7 +179,6 @@ function login(){
   document.getElementById('welcome').textContent=
    role==='manager'?'أهلاً مدير Giftora':'أهلاً كاشير Giftora';
 
-  // إظهار الأقسام حسب صلاحية المستخدم
   document.getElementById('navDashboard').style.display=
    role==='manager'?'block':'none';
 
@@ -195,7 +196,6 @@ function login(){
 
   refresh();
 
-  // المدير يبدأ بالرئيسية والكاشير يبدأ بالبيع
   show(role==='manager'?'dashboard':'sales');
 
  }else{
@@ -236,7 +236,7 @@ function show(id){
  refresh();
 }
 
-// إضافة منتج
+// إضافة منتج جديد
 function addProduct(){
 
  if(currentRole!=='manager'){
@@ -278,6 +278,47 @@ function addProduct(){
  refresh();
 
  alert('تم إضافة المنتج بنجاح');
+}
+
+// إضافة كمية جديدة للمخزون
+function restockProduct(id){
+
+ if(currentRole!=='manager'){
+  alert('إضافة الكميات للمدير فقط');
+  return;
+ }
+
+ const product=products.find(p=>p.id===id);
+
+ if(!product){
+  alert('المنتج غير موجود');
+  return;
+ }
+
+ const input=prompt(
+  'المنتج: '+product.name+
+  '\nالكمية الحالية: '+product.qty+
+  '\nاكتب الكمية الجديدة التي تريد إضافتها:'
+ );
+
+ if(input===null)return;
+
+ const qty=Number(input);
+
+ if(!Number.isInteger(qty)||qty<=0){
+  alert('اكتب كمية صحيحة أكبر من صفر');
+  return;
+ }
+
+ product.qty+=qty;
+
+ save();
+ refresh();
+
+ alert(
+  'تمت إضافة '+qty+' قطعة بنجاح'+
+  '\nالكمية الجديدة في المخزون: '+product.qty
+ );
 }
 
 // إتمام البيع
@@ -325,7 +366,6 @@ function sell(){
  document.getElementById('saleQty').value=1;
 
  refresh();
-
 }
 
 // حذف منتج
@@ -360,16 +400,22 @@ function refresh(){
  document.getElementById('rProfit').textContent=money(profit);
  document.getElementById('rCost').textContent=money(cost);
 
- // عرض المنتجات
+ // عرض المنتجات وأزرار المدير
  document.getElementById('productList').innerHTML=
   products.map(p=>
    `<div class="item">
    <b>${escapeHTML(p.name)}</b><br>
    سعر الشراء: ${money(p.cost)} جنيه<br>
    سعر البيع: ${money(p.price)} جنيه<br>
-   الكمية: ${p.qty}
+   الكمية الحالية: <b>${p.qty}</b> قطعة
+
    ${currentRole==='manager'?
-    `<button class="danger" onclick="deleteProduct(${p.id})">حذف المنتج</button>`
+    `<button class="addStock" onclick="restockProduct(${p.id})">
+    + إضافة كمية للمخزون
+    </button>
+    <button class="danger" onclick="deleteProduct(${p.id})">
+    حذف المنتج
+    </button>`
     :''}
    </div>`
   ).join('')||'لا توجد منتجات';
