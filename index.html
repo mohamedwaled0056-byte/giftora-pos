@@ -1,209 +1,115 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#111111">
-<meta name="description" content="Giftora Point of Sale">
-<link rel="manifest" href="./manifest.json">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123B68">
 <title>Giftora POS</title>
-
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- background:#EAF6FF;
- color:#17324D;
- font-family:Arial,sans-serif
-}
-
-header{
- background:#123B68;
- padding:22px;
- text-align:center;
- border-bottom:4px solid #65B9E8
-}
-
-h1{color:white;margin:0;font-size:30px}
-header p{color:#D7EEFF;margin-bottom:0}
-
-main{max-width:900px;margin:auto;padding:15px}
-
-.card{
- background:white;
- border:1px solid #B8DDF4;
- border-radius:14px;
- padding:15px;
- margin:12px 0;
- box-shadow:0 3px 12px rgba(18,59,104,.08)
-}
-
+body{margin:0;background:#EAF6FF;color:#17324D;font-family:Arial,sans-serif}
+header{background:#123B68;color:white;padding:18px;text-align:center;border-bottom:4px solid #65B9E8}
+h1{margin:0}
+main{max-width:1100px;margin:auto;padding:12px}
+.card{background:white;border:1px solid #B8DDF4;border-radius:13px;padding:14px;margin:12px 0;box-shadow:0 3px 12px #123b6810}
 h2,h3{color:#123B68}
-
-input,select,button{
- width:100%;
- padding:13px;
- margin:6px 0;
- border-radius:8px;
- font-size:15px
-}
-
-input,select{
- background:#F4FAFF;
- color:#17324D;
- border:1px solid #A9D3EE
-}
-
-button{
- background:#65B9E8;
- color:#123B68;
- border:0;
- font-weight:bold;
- cursor:pointer
-}
-
-.secondary{background:#123B68;color:white}
-.danger{background:#C84B5A;color:white}
-.addStock{background:#269B83;color:white}
-
-nav{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:8px
-}
-
-.stats{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:10px
-}
-
-.stat{
- background:#EAF6FF;
- border:1px solid #C5E4F7;
- padding:15px;
- border-radius:10px;
- text-align:center
-}
-
-.stat strong{
- display:block;
- color:#1676B8;
- font-size:21px;
- margin-top:8px
-}
-
+input,select,textarea,button{width:100%;padding:11px;margin:5px 0;border-radius:8px;font-size:15px}
+input,select,textarea{border:1px solid #a9d3ee;background:#f7fbff;color:#17324d}
+textarea{min-height:65px}
+button{border:0;background:#65B9E8;color:#123B68;font-weight:bold;cursor:pointer}
+.dark{background:#123B68;color:white}
+.red{background:#c84b5a;color:white}
+.green{background:#269b83;color:white}
+.orange{background:#e99a42;color:#fff}
+.nav{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .hidden{display:none!important}
-.small{color:#66839A;font-size:12px}
-
-.item{
- padding:12px;
- border-bottom:1px solid #D5EAF7;
- line-height:1.8
+.small{font-size:12px;color:#66839a}
+.item{padding:10px;margin:7px 0;border:1px solid #d5eaf7;border-radius:9px;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:#eaf6ff;padding:13px;border-radius:9px;text-align:center}
+.stat b{display:block;font-size:20px;color:#1676b8;margin-top:5px}
+.line{display:flex;gap:6px;align-items:center}
+.line>*{flex:1}
+.tag{display:inline-block;padding:3px 8px;border-radius:20px;background:#eaf6ff;font-size:12px}
+.product-row{background:#f3faff;border-right:4px solid #65b9e8}
+.product-row:nth-child(6n+2){background:#eaf8f2;border-color:#36a878}
+.product-row:nth-child(6n+3){background:#fff4e8;border-color:#e99a42}
+.product-row:nth-child(6n+4){background:#f5eeff;border-color:#9870d5}
+.product-row:nth-child(6n+5){background:#fff0f3;border-color:#d96c91}
+.product-row:nth-child(6n){background:#f0f5f8;border-color:#71899c}
+@media(min-width:700px){
+.nav{grid-template-columns:repeat(4,1fr)}
+.grid{grid-template-columns:repeat(3,1fr)}
 }
-
-/* ألوان مختلفة للمنتجات */
-#productList .item:nth-child(6n+1){
- background:#EAF6FF;border-right:5px solid #2696D2;
- border-radius:9px
+@media print{
+body{background:white}
+.no-print,header,#app nav{display:none!important}
+#printArea{display:block!important}
+.card{box-shadow:none;border:0}
 }
-#productList .item:nth-child(6n+2){
- background:#EAF8F2;border-right:5px solid #36A878;
- border-radius:9px
-}
-#productList .item:nth-child(6n+3){
- background:#FFF4E8;border-right:5px solid #E99A42;
- border-radius:9px
-}
-#productList .item:nth-child(6n+4){
- background:#F5EEFF;border-right:5px solid #9870D5;
- border-radius:9px
-}
-#productList .item:nth-child(6n+5){
- background:#FFF0F3;border-right:5px solid #D96C91;
- border-radius:9px
-}
-#productList .item:nth-child(6n+6){
- background:#F0F5F8;border-right:5px solid #71899C;
- border-radius:9px
-}
-
-#saleMessage{color:#1676B8;font-weight:bold}
 </style>
 </head>
-
 <body>
-
 <header>
 <h1>GIFTORA</h1>
-<p>POINT OF SALE • SALES & INVENTORY</p>
+<div>POINT OF SALE • SALES & INVENTORY</div>
 </header>
-
 <main>
 
 <section id="login" class="card">
 <h2>تسجيل الدخول</h2>
-
-<select id="role">
-<option value="manager">مدير الفرع</option>
-<option value="cashier">كاشير</option>
-</select>
-
-<input id="pin" type="password" placeholder="الرقم السري">
-
+<label>اسم المستخدم</label>
+<input id="loginUser" autocomplete="username" placeholder="اكتب اسم المستخدم">
+<label>كلمة المرور</label>
+<input id="loginPass" type="password" autocomplete="current-password" placeholder="كلمة المرور">
 <button onclick="login()">دخول</button>
-
-<p class="small">المدير: 1234 | الكاشير: 0000 (أول استخدام فقط)</p>
+<p class="small">أول دخول افتراضي: المدير admin / 1234 — الكاشير cashier / 0000. غيّر كلمات المرور بعد الدخول.</p>
 </section>
 
 <section id="app" class="hidden">
-
-<div class="card">
+<div class="card no-print">
 <span id="welcome"></span>
-<button class="secondary" onclick="logout()">تسجيل الخروج</button>
+<button class="dark" onclick="logout()">تسجيل الخروج</button>
 </div>
 
-<nav>
-<button id="navDashboard" onclick="show('dashboard')">الرئيسية</button>
-<button onclick="show('sales')">فاتورة بيع جديدة</button>
-<button id="navProducts" onclick="show('products')">المنتجات</button>
+<nav class="nav no-print">
+<button onclick="show('dashboard')" id="navDash">الرئيسية</button>
+<button onclick="show('sales')">فاتورة جديدة</button>
 <button onclick="show('history')">الفواتير</button>
-<button id="navReports" onclick="show('reports')">التقارير</button>
-<button id="navSettings" onclick="show('settings')">الإعدادات</button>
-<button onclick="show('passwordPage')">حسابي وتغيير كلمة المرور</button>
+<button onclick="show('products')" id="navProducts">المنتجات والمخزون</button>
+<button onclick="show('customers')" id="navCustomers">العملاء</button>
+<button onclick="show('delivery')" id="navDelivery">التوصيل والمندوبون</button>
+<button onclick="show('expenses')">المصروفات</button>
+<button onclick="show('shifts')">الورديات والخزنة</button>
+<button onclick="show('reports')" id="navReports">التقارير</button>
+<button onclick="show('users')" id="navUsers">المستخدمون</button>
+<button onclick="show('settings')" id="navSettings">الإعدادات والنسخ</button>
+<button onclick="show('myaccount')">حسابي</button>
 </nav>
 
 <section id="dashboard" class="card page hidden">
 <h2>لوحة التحكم</h2>
 <div class="stats">
-<div class="stat">إجمالي المبيعات<strong id="total">0</strong></div>
-<div class="stat">عدد الفواتير<strong id="count">0</strong></div>
-<div class="stat">صافي الربح<strong id="profit">0</strong></div>
-<div class="stat">المنتجات<strong id="stock">0</strong></div>
+<div class="stat">إجمالي المبيعات<b id="dSales">0</b></div>
+<div class="stat">عدد الفواتير<b id="dCount">0</b></div>
+<div class="stat">الربح التقديري<b id="dProfit">0</b></div>
+<div class="stat">قطع المخزون<b id="dStock">0</b></div>
 </div>
-</section>
-
-<section id="products" class="card page hidden">
-<h2>إدارة المنتجات</h2>
-<div id="addProduct">
-<input id="pname" placeholder="اسم المنتج">
-<input id="pcost" type="number" min="0" placeholder="سعر الشراء">
-<input id="pprice" type="number" min="0" placeholder="سعر البيع">
-<input id="pqty" type="number" min="0" placeholder="الكمية">
-<button onclick="addProduct()">إضافة منتج</button>
-</div>
-<h3>قائمة المخزون</h3>
-<div id="productList"></div>
+<div id="lowStock"></div>
 </section>
 
 <section id="sales" class="card page hidden">
 <h2>فاتورة بيع جديدة</h2>
-<label>اختار المنتج</label>
-<select id="productSelect"></select>
-<label>الكمية</label>
-<input id="saleQty" type="number" min="1" value="1">
+<div class="grid">
+<div>
+<label>نوع الأوردر</label>
+<select id="orderType" onchange="toggleDelivery()">
+<option value="محلي">محلي</option>
+<option value="توصيل">توصيل</option>
+</select>
+</div>
+<div>
 <label>طريقة الدفع</label>
 <select id="payment">
 <option>نقدي</option>
@@ -211,169 +117,286 @@ nav{
 <option>محفظة إلكترونية</option>
 <option>إنستا باي</option>
 </select>
-<button onclick="sell()">إتمام البيع</button>
+</div>
+</div>
+
+<div id="deliveryFields" class="card hidden">
+<h3>بيانات العميل والتوصيل</h3>
+<input id="custName" placeholder="اسم العميل">
+<input id="custPhone" placeholder="رقم الهاتف" inputmode="tel">
+<input id="custAddress" placeholder="العنوان بالكامل">
+<div class="grid">
+<input id="building" placeholder="رقم العمارة">
+<input id="floor" placeholder="الدور">
+</div>
+<input id="landmark" placeholder="علامة مميزة بجوار المكان">
+<label>سعر التوصيل</label>
+<select id="deliveryFee">
+<option>40</option><option>50</option><option>60</option>
+<option>70</option><option>80</option><option>90</option>
+<option>100</option><option>110</option><option>120</option>
+<option>130</option><option>140</option><option>150</option>
+</select>
+</div>
+
+<h3>إضافة منتجات للفاتورة</h3>
+<div class="grid">
+<select id="productSelect"></select>
+<input id="saleQty" type="number" min="1" value="1" placeholder="الكمية">
+</div>
+<input id="itemNote" placeholder="ملاحظة للمنتج (لون / تغليف / طلب خاص)">
+<button onclick="addToCart()">إضافة المنتج للفاتورة</button>
+<div id="cartList"></div>
+<div class="card">
+<p>إجمالي المنتجات قبل الضريبة: <b id="subTotal">0.00</b> جنيه</p>
+<p>ضريبة VAT (20%): <b id="vatTotal">0.00</b> جنيه</p>
+<p>التوصيل: <b id="feeTotal">0.00</b> جنيه</p>
+<h3>الإجمالي النهائي: <span id="grandTotal">0.00</span> جنيه</h3>
+<p class="small">الضريبة محسوبة كنسبة إعداد داخلية وليست فاتورة ضريبية رسمية.</p>
+</div>
+<button class="green" onclick="completeOrder()">إتمام وحفظ الفاتورة</button>
+<button class="dark" onclick="clearCart()">تفريغ الفاتورة</button>
 <p id="saleMessage"></p>
 </section>
 
 <section id="history" class="card page hidden">
 <h2>سجل الفواتير</h2>
+<input id="historySearch" placeholder="بحث برقم الفاتورة أو العميل أو الهاتف" oninput="renderHistory()">
 <div id="historyList"></div>
+</section>
+
+<section id="products" class="card page hidden">
+<h2>إدارة المنتجات</h2>
+<div id="productForm">
+<input id="pname" placeholder="اسم المنتج">
+<div class="grid">
+<input id="pcost" type="number" min="0" placeholder="سعر الشراء">
+<input id="pprice" type="number" min="0" placeholder="سعر البيع">
+</div>
+<div class="grid">
+<input id="pqty" type="number" min="0" placeholder="الكمية">
+<input id="pmin" type="number" min="0" placeholder="حد التنبيه الأدنى">
+</div>
+<input id="pbarcode" placeholder="الباركود (اختياري)">
+<button onclick="addProduct()">إضافة منتج</button>
+</div>
+<h3>المخزون</h3>
+<div id="productList"></div>
+<h3>أنواع تغليف الهدايا</h3>
+<div class="grid">
+<input id="wrapName" placeholder="اسم التغليف">
+<input id="wrapPrice" type="number" placeholder="السعر">
+</div>
+<button onclick="addWrap()">إضافة نوع تغليف</button>
+<div id="wrapList"></div>
+</section>
+
+<section id="customers" class="card page hidden">
+<h2>سجل العملاء</h2>
+<input id="customerSearch" placeholder="بحث برقم الهاتف أو كود العميل" oninput="renderCustomers()">
+<div id="customerList"></div>
+</section>
+
+<section id="delivery" class="card page hidden">
+<h2>إدارة التوصيل والمندوبين</h2>
+<div class="grid">
+<input id="riderName" placeholder="اسم المندوب">
+<input id="riderPhone" placeholder="هاتف المندوب">
+</div>
+<button onclick="addRider()">إضافة مندوب</button>
+<div id="riderList"></div>
+<h3>طلبات التوصيل</h3>
+<div id="deliveryList"></div>
+</section>
+
+<section id="expenses" class="card page hidden">
+<h2>تسجيل مصروف</h2>
+<input id="expenseDesc" placeholder="بيان المصروف">
+<input id="expenseAmount" type="number" min="0" placeholder="المبلغ">
+<button onclick="addExpense()">تسجيل المصروف</button>
+<div id="expenseList"></div>
+</section>
+
+<section id="shifts" class="card page hidden">
+<h2>الورديات والخزنة</h2>
+<div id="shiftStatus"></div>
+<input id="openingCash" type="number" placeholder="رصيد بداية الوردية">
+<button onclick="startShift()">بدء الوردية</button>
+<input id="actualCash" type="number" placeholder="النقدية الفعلية عند التقفيل">
+<button onclick="closeShift()">تقفيل الوردية</button>
+<div id="shiftList"></div>
 </section>
 
 <section id="reports" class="card page hidden">
 <h2>التقارير</h2>
-<p>المبيعات: <strong id="rTotal">0</strong> جنيه</p>
-<p>التكلفة: <strong id="rCost">0</strong> جنيه</p>
-<p>الربح: <strong id="rProfit">0</strong> جنيه</p>
+<div id="reportContent"></div>
+<h3>أداء الكاشير</h3>
+<div id="cashierPerformance"></div>
+</section>
+
+<section id="users" class="card page hidden">
+<h2>إدارة المستخدمين (المدير فقط)</h2>
+<div class="grid">
+<input id="newUsername" placeholder="اسم المستخدم">
+<input id="newFullname" placeholder="اسم الموظف الظاهر">
+</div>
+<div class="grid">
+<input id="newUserPass" type="password" placeholder="كلمة المرور">
+<select id="newUserRole">
+<option value="cashier">كاشير</option>
+<option value="manager">مدير فرع</option>
+</select>
+</div>
+<button onclick="createUser()">إنشاء مستخدم</button>
+<div id="userList"></div>
 </section>
 
 <section id="settings" class="card page hidden">
-<h2>الإعدادات</h2>
-<button onclick="exportData()">تحميل نسخة احتياطية</button>
-<p class="small">احتفظ بنسخة احتياطية من بياناتك بانتظام.</p>
+<h2>الإعدادات والنسخ الاحتياطي</h2>
+<button onclick="exportData()">تحميل نسخة احتياطية JSON</button>
+<label>استعادة نسخة JSON</label>
+<input id="restoreFile" type="file" accept=".json,application/json">
+<button onclick="restoreData()">استعادة النسخة</button>
+<p class="small">احتفظ بنسخة احتياطية دورية. البيانات محلية على هذا المتصفح فقط.</p>
 </section>
 
-<section id="passwordPage" class="card page hidden">
+<section id="myaccount" class="card page hidden">
 <h2>حسابي وتغيير كلمة المرور</h2>
-
-<p id="accountName"></p>
-
-<input id="oldPin" type="password" placeholder="الرقم السري الحالي">
-<input id="newPin" type="password" placeholder="الرقم السري الجديد">
-<input id="confirmPin" type="password" placeholder="تأكيد الرقم السري الجديد">
-
-<button onclick="changePassword()">حفظ كلمة المرور الجديدة</button>
-
-<p class="small">استخدم رقمًا سريًا جديدًا من 4 أرقام على الأقل.</p>
+<p id="accountInfo"></p>
+<input id="oldPass" type="password" placeholder="كلمة المرور الحالية">
+<input id="newPass" type="password" placeholder="كلمة المرور الجديدة">
+<input id="confirmPass" type="password" placeholder="تأكيد كلمة المرور">
+<button onclick="changeMyPassword()">حفظ كلمة المرور</button>
 </section>
-
 </section>
+<section id="printArea" class="card hidden"></section>
 </main>
-
 <script>
+const $=id=>document.getElementById(id);
+const money=n=>(Number(n)||0).toFixed(2);
+const now=()=>new Date().toLocaleString('ar-EG');
 
 let products=JSON.parse(localStorage.getItem('giftora_products')||'[]');
-let sales=JSON.parse(localStorage.getItem('giftora_sales')||'[]');
+let legacySales=JSON.parse(localStorage.getItem('giftora_sales')||'[]');
+let orders=JSON.parse(localStorage.getItem('giftora_orders')||'null');
 
-let currentRole='';
+if(!orders){
+ orders=legacySales.map((s,i)=>({
+  id:s.id||Date.now()+i,
+  invoiceNo:i+1,
+  date:s.date||now(),
+  type:'محلي',
+  customer:null,
+  items:[{
+   name:s.name,qty:s.qty,price:s.price,cost:s.cost,note:''
+  }],
+  payment:s.payment||'نقدي',
+  subtotal:s.total||s.price*s.qty,
+  vat:0,fee:0,
+  total:s.total||s.price*s.qty,
+  profit:s.profit||((s.price-s.cost)*s.qty),
+  cashier:'كاشير',
+  status:'تم التسليم',
+  legacy:true
+ }));
+}
 
-let passwords=JSON.parse(
- localStorage.getItem('giftora_passwords')||
- '{"manager":"1234","cashier":"0000"}'
-);
+let oldPasswords=JSON.parse(localStorage.getItem('giftora_passwords')||'{}');
 
-const money=n=>(Number(n)||0).toFixed(2);
+let users=JSON.parse(localStorage.getItem('giftora_users')||'null')||[
+ {username:'admin',fullname:'مدير Giftora',password:oldPasswords.manager||'1234',role:'manager',active:true},
+ {username:'cashier',fullname:'كاشير Giftora',password:oldPasswords.cashier||'0000',role:'cashier',active:true}
+];
+
+let customers=JSON.parse(localStorage.getItem('giftora_customers')||'{}');
+let riders=JSON.parse(localStorage.getItem('giftora_riders')||'[]');
+let expenses=JSON.parse(localStorage.getItem('giftora_expenses')||'[]');
+let shifts=JSON.parse(localStorage.getItem('giftora_shifts')||'[]');
+let wrappings=JSON.parse(localStorage.getItem('giftora_wrappings')||'[]');
+
+let cart=[];
+let currentUser=null;
+
+let invoiceSeq=Number(localStorage.getItem('giftora_invoice_seq')||0);
+if(!invoiceSeq) invoiceSeq=Math.max(0,...orders.map(o=>Number(o.invoiceNo)||0));
 
 function save(){
- localStorage.setItem('giftora_products',JSON.stringify(products));
- localStorage.setItem('giftora_sales',JSON.stringify(sales));
- localStorage.setItem('giftora_passwords',JSON.stringify(passwords));
+ [
+  ['giftora_products',products],
+  ['giftora_orders',orders],
+  ['giftora_users',users],
+  ['giftora_customers',customers],
+  ['giftora_riders',riders],
+  ['giftora_expenses',expenses],
+  ['giftora_shifts',shifts],
+  ['giftora_wrappings',wrappings]
+ ].forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v)));
+
+ localStorage.setItem('giftora_invoice_seq',invoiceSeq);
 }
 
-// تسجيل الدخول
+function isManager(){
+ return currentUser&&currentUser.role==='manager';
+}
+
+// تسجيل الدخول باسم المستخدم وكلمة المرور
 function login(){
+ let u=$('loginUser').value.trim();
+ let p=$('loginPass').value;
 
- const role=document.getElementById('role').value;
- const pin=document.getElementById('pin').value;
+ let x=users.find(a=>
+  a.username===u &&
+  a.password===p &&
+  a.active!==false
+ );
 
- if(pin===passwords[role]){
-
-  currentRole=role;
-
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-
-  document.getElementById('welcome').textContent=
-   role==='manager'?'أهلاً مدير Giftora':'أهلاً كاشير Giftora';
-
-  document.getElementById('accountName').textContent=
-   role==='manager'?'الحساب الحالي: مدير الفرع':'الحساب الحالي: كاشير';
-
-  document.getElementById('navDashboard').style.display=
-   role==='manager'?'block':'none';
-
-  document.getElementById('navProducts').style.display=
-   role==='manager'?'block':'none';
-
-  document.getElementById('navReports').style.display=
-   role==='manager'?'block':'none';
-
-  document.getElementById('navSettings').style.display=
-   role==='manager'?'block':'none';
-
-  document.getElementById('addProduct').style.display=
-   role==='manager'?'block':'none';
-
-  refresh();
-  show(role==='manager'?'dashboard':'sales');
-
- }else{
-  alert('الرقم السري غير صحيح');
+ if(!x){
+  alert('اسم المستخدم أو كلمة المرور غير صحيحة أو الحساب موقوف');
+  return;
  }
+
+ currentUser=x;
+
+ $('login').classList.add('hidden');
+ $('app').classList.remove('hidden');
+
+ $('welcome').textContent=
+  'أهلاً '+x.fullname+' — '+
+  (x.role==='manager'?'مدير':'كاشير');
+
+ $('accountInfo').textContent=
+  'اسم المستخدم: '+x.username+
+  ' | الاسم: '+x.fullname+
+  ' | الصلاحية: '+x.role;
+
+ [
+  'navDash','navProducts','navCustomers',
+  'navDelivery','navReports','navUsers','navSettings'
+ ].forEach(id=>{
+  $(id).classList.toggle('hidden',!isManager());
+ });
+
+ refresh();
+ show(isManager()?'dashboard':'sales');
 }
 
-// تغيير كلمة المرور
-function changePassword(){
-
- if(!currentRole){
-  alert('سجل الدخول أولاً');
-  return;
- }
-
- const oldPin=document.getElementById('oldPin').value;
- const newPin=document.getElementById('newPin').value;
- const confirmPin=document.getElementById('confirmPin').value;
-
- if(oldPin!==passwords[currentRole]){
-  alert('الرقم السري الحالي غير صحيح');
-  return;
- }
-
- if(!/^\d{4,12}$/.test(newPin)){
-  alert('الرقم السري يجب أن يكون من 4 إلى 12 رقمًا');
-  return;
- }
-
- if(newPin===oldPin){
-  alert('اختار رقمًا سريًا مختلفًا عن القديم');
-  return;
- }
-
- if(newPin!==confirmPin){
-  alert('تأكيد الرقم السري غير مطابق');
-  return;
- }
-
- passwords[currentRole]=newPin;
- save();
-
- document.getElementById('oldPin').value='';
- document.getElementById('newPin').value='';
- document.getElementById('confirmPin').value='';
-
- alert('تم تغيير الرقم السري بنجاح. استخدم الرقم الجديد في تسجيل الدخول القادم.');
-}
-
-// تسجيل الخروج
 function logout(){
-
- currentRole='';
-
- document.getElementById('app').classList.add('hidden');
- document.getElementById('login').classList.remove('hidden');
- document.getElementById('pin').value='';
-
+ currentUser=null;
+ $('app').classList.add('hidden');
+ $('login').classList.remove('hidden');
+ $('loginPass').value='';
 }
 
-// التنقل بين الأقسام
 function show(id){
+ if(!currentUser)return;
 
- if(!currentRole)return;
+ let managerOnly=[
+  'dashboard','products','customers',
+  'delivery','reports','users','settings'
+ ];
 
- if(currentRole==='cashier'&&
-    !['sales','history','passwordPage'].includes(id)){
-
-  alert('غير مسموح للكاشير بالدخول لهذا القسم');
+ if(managerOnly.includes(id)&&!isManager()){
+  alert('هذه الصلاحية للمدير فقط');
   return;
  }
 
@@ -381,216 +404,809 @@ function show(id){
   x.classList.add('hidden')
  );
 
- document.getElementById(id).classList.remove('hidden');
-
+ $(id).classList.remove('hidden');
  refresh();
 }
 
-// إضافة منتج جديد
-function addProduct(){
-
- if(currentRole!=='manager'){
-  alert('هذه الخاصية للمدير فقط');
-  return;
- }
-
- const name=document.getElementById('pname').value.trim();
- const cost=Number(document.getElementById('pcost').value);
- const price=Number(document.getElementById('pprice').value);
- const qty=Number(document.getElementById('pqty').value);
-
- if(!name||!Number.isFinite(cost)||!Number.isFinite(price)||
-    !Number.isInteger(qty)||cost<0||price<=0||qty<0){
-
-  alert('راجع بيانات المنتج');
-  return;
- }
-
- products.push({id:Date.now(),name,cost,price,qty});
-
- save();
-
- ['pname','pcost','pprice','pqty'].forEach(id=>{
-  document.getElementById(id).value='';
- });
-
- refresh();
- alert('تم إضافة المنتج بنجاح');
-}
-
-// إضافة كمية للمخزون
-function restockProduct(id){
-
- if(currentRole!=='manager'){
-  alert('إضافة الكميات للمدير فقط');
-  return;
- }
-
- const product=products.find(p=>p.id===id);
- if(!product)return;
-
- const input=prompt(
-  'المنتج: '+product.name+
-  '\nالكمية الحالية: '+product.qty+
-  '\nاكتب الكمية التي تريد إضافتها:'
+// نوع الأوردر
+function toggleDelivery(){
+ $('deliveryFields').classList.toggle(
+  'hidden',
+  $('orderType').value!=='توصيل'
  );
-
- if(input===null)return;
-
- const qty=Number(input);
-
- if(!Number.isInteger(qty)||qty<=0){
-  alert('اكتب كمية صحيحة أكبر من صفر');
-  return;
- }
-
- product.qty+=qty;
- save();
- refresh();
-
- alert('تمت إضافة الكمية بنجاح. المخزون الحالي: '+product.qty);
+ renderCart();
 }
 
-// إتمام البيع
-function sell(){
+// إضافة منتج للفاتورة
+function addToCart(){
+ let p=products.find(x=>x.id===Number($('productSelect').value));
+ let q=Number($('saleQty').value);
 
- if(!currentRole)return;
-
- const id=Number(document.getElementById('productSelect').value);
- const qty=Number(document.getElementById('saleQty').value);
-
- const p=products.find(x=>x.id===id);
-
- if(!p||!Number.isInteger(qty)||qty<1){
-  alert('اختر منتجاً وكمية صحيحة');
-  return;
+ if(!p||!Number.isInteger(q)||q<1){
+  return alert('اختر منتجًا وكمية صحيحة');
  }
 
- if(p.qty<qty){
-  alert('الكمية غير متوفرة بالمخزون');
-  return;
+ let already=cart
+  .filter(x=>x.productId===p.id)
+  .reduce((a,x)=>a+x.qty,0);
+
+ if(p.qty<already+q){
+  return alert('الكمية المطلوبة أكبر من المخزون المتاح');
  }
 
- p.qty-=qty;
-
- sales.push({
-  id:Date.now(),
-  date:new Date().toLocaleString('ar-EG'),
+ cart.push({
+  productId:p.id,
   name:p.name,
-  qty,
+  qty:q,
   price:p.price,
   cost:p.cost,
-  payment:document.getElementById('payment').value,
-  total:p.price*qty,
-  profit:(p.price-p.cost)*qty
+  note:$('itemNote').value.trim()
  });
+
+ $('saleQty').value=1;
+ $('itemNote').value='';
+
+ renderCart();
+}
+
+// عرض محتويات الفاتورة
+function renderCart(){
+ let box=$('cartList');
+
+ box.innerHTML=cart.map((x,i)=>`
+  <div class="item">
+   <b>${esc(x.name)}</b> —
+   ${x.qty} × ${money(x.price)} =
+   ${money(x.qty*x.price)} جنيه
+   <br>
+   <label>ملاحظة المنتج</label>
+   <input value="${esc(x.note)}"
+    onchange="cart[${i}].note=this.value"
+    placeholder="ملاحظة">
+   <button class="red" onclick="removeCart(${i})">
+    حذف من الفاتورة
+   </button>
+  </div>
+ `).join('')||'لم تتم إضافة منتجات بعد';
+
+ let sub=cart.reduce((a,x)=>a+x.qty*x.price,0);
+ let vat=sub*.20;
+ let fee=$('orderType').value==='توصيل'
+  ?Number($('deliveryFee').value):0;
+
+ $('subTotal').textContent=money(sub);
+ $('vatTotal').textContent=money(vat);
+ $('feeTotal').textContent=money(fee);
+ $('grandTotal').textContent=money(sub+vat+fee);
+}
+
+function removeCart(i){
+ cart.splice(i,1);
+ renderCart();
+}
+
+function clearCart(){
+ cart=[];
+ renderCart();
+}
+
+// إنشاء كود ثابت للعميل
+function customerFor(phone,name){
+ let c=customers[phone];
+
+ if(!c){
+  let code;
+
+  do{
+   code=String(Math.floor(10000+Math.random()*90000));
+  }while(Object.values(customers).some(x=>x.code===code));
+
+  c=customers[phone]={
+   phone,
+   code,
+   name,
+   orders:[]
+  };
+ }else if(name){
+  c.name=name;
+ }
+
+ return c;
+}
+
+// إتمام الفاتورة
+function completeOrder(){
+ if(!cart.length){
+  return alert('أضف منتجًا واحدًا على الأقل');
+ }
+
+ let type=$('orderType').value;
+ let customer=null;
+
+ if(type==='توصيل'){
+  let phone=$('custPhone').value.trim();
+  let name=$('custName').value.trim();
+
+  if(!name||!/^01\d{9}$/.test(phone)||!$('custAddress').value.trim()){
+   return alert('اكتب اسم العميل ورقم هاتف مصري صحيح والعنوان');
+  }
+
+  customer={
+   ...customerFor(phone,name),
+   address:$('custAddress').value.trim(),
+   building:$('building').value.trim(),
+   floor:$('floor').value.trim(),
+   landmark:$('landmark').value.trim()
+  };
+ }
+
+ for(let x of cart){
+  if(!x.productId)continue;
+
+  let p=products.find(p=>p.id===x.productId);
+
+  if(!p||p.qty<x.qty){
+   return alert('المخزون تغير أو الكمية غير كافية للمنتج: '+x.name);
+  }
+ }
+
+ cart.forEach(x=>{
+  if(x.productId){
+   products.find(p=>p.id===x.productId).qty-=x.qty;
+  }
+ });
+
+ let subtotal=cart.reduce((a,x)=>a+x.qty*x.price,0);
+ let vat=subtotal*.20;
+ let fee=type==='توصيل'?Number($('deliveryFee').value):0;
+
+ let profit=cart.reduce(
+  (a,x)=>a+x.qty*(x.price-x.cost),0
+ );
+
+ invoiceSeq++;
+
+ let o={
+  id:Date.now(),
+  invoiceNo:invoiceSeq,
+  date:new Date().toLocaleString('ar-EG',{hour12:true}),
+  type,
+  customer,
+  payment:$('payment').value,
+  items:cart.map(x=>({...x})),
+  subtotal,
+  vat,
+  fee,
+  total:subtotal+vat+fee,
+  profit,
+  cashier:currentUser.fullname,
+  cashierUser:currentUser.username,
+  status:type==='توصيل'?'جديد':'تم التسليم',
+  riderId:null,
+  editLog:[]
+ };
+
+ orders.push(o);
+
+ if(customer){
+  customers[customer.phone].orders.push(o.id);
+ }
 
  save();
 
- document.getElementById('saleMessage').textContent=
-  'تم تسجيل البيع بنجاح - الإجمالي: '+money(p.price*qty)+' جنيه';
+ cart=[];
+ renderCart();
 
- document.getElementById('saleQty').value=1;
+ $('saleMessage').textContent=
+  'تم حفظ الفاتورة رقم '+o.invoiceNo+' بنجاح';
+
  refresh();
+ printInvoice(o.id);
 }
 
-// حذف منتج
-function deleteProduct(id){
+// طباعة الفاتورة
+function printInvoice(id){
+ let o=orders.find(x=>x.id===id);
+ if(!o)return;
 
- if(currentRole!=='manager')return;
+ let c=o.customer;
 
- if(confirm('هل تريد حذف المنتج؟')){
-  products=products.filter(x=>x.id!==id);
+ $('printArea').innerHTML=`
+  <div style="text-align:center">
+   <h2>GIFTORA STORE</h2>
+   <h3>فاتورة رقم ${o.invoiceNo}</h3>
+   <p>${esc(o.date)}</p>
+  </div>
+  <hr>
+  <p>نوع الطلب: ${esc(o.type)} | الكاشير: ${esc(o.cashier)}</p>
+
+  ${c?`
+   <p>العميل: ${esc(c.name)} | كود العميل: ${esc(c.code)}</p>
+   <p>الهاتف: ${esc(c.phone)}</p>
+   <p>العنوان: ${esc(c.address)} — عمارة ${esc(c.building)} — الدور ${esc(c.floor)} — علامة: ${esc(c.landmark)}</p>
+  `:''}
+
+  <table style="width:100%;border-collapse:collapse" border="1" cellpadding="6">
+   <tr>
+    <th>المنتج</th><th>الكمية</th>
+    <th>السعر</th><th>الإجمالي</th><th>ملاحظة</th>
+   </tr>
+   ${o.items.map(x=>`
+    <tr>
+     <td>${esc(x.name)}</td>
+     <td>${x.qty}</td>
+     <td>${money(x.price)}</td>
+     <td>${money(x.price*x.qty)}</td>
+     <td>${esc(x.note)}</td>
+    </tr>
+   `).join('')}
+  </table>
+
+  <p>إجمالي المنتجات: ${money(o.subtotal)} جنيه</p>
+  <p>ضريبة 20%: ${money(o.vat)} جنيه</p>
+  <p>التوصيل: ${money(o.fee)} جنيه</p>
+  <h3>الإجمالي: ${money(o.total)} جنيه</h3>
+  <p>طريقة الدفع: ${esc(o.payment)}</p>
+  <hr>
+  <center>
+   <b>شكراً لاختياركم Giftora Store</b>
+   <p>نتمنى لكم أوقات سعيدة</p>
+  </center>
+  <button class="no-print" onclick="window.print()">طباعة الفاتورة</button>
+ `;
+
+ $('printArea').classList.remove('hidden');
+ window.print();
+ $('printArea').classList.add('hidden');
+}
+
+// سجل الفواتير
+function renderHistory(){
+ let q=($('historySearch')?.value||'').toLowerCase();
+
+ $('historyList').innerHTML=[...orders].reverse()
+ .filter(o=>isManager()||(o.cashierUser===currentUser.username))
+ .filter(o=>
+  String(o.invoiceNo).includes(q)||
+  (o.customer?.name||'').toLowerCase().includes(q)||
+  (o.customer?.phone||'').includes(q)
+ )
+ .map(o=>`
+  <div class="item">
+   <b>فاتورة #${o.invoiceNo} — ${esc(o.type)}</b><br>
+   ${esc(o.date)} | ${esc(o.cashier)}<br>
+   ${o.items.map(x=>
+    esc(x.name)+' × '+x.qty+
+    (x.note?' ('+esc(x.note)+')':'')
+   ).join('، ')}
+   <br>
+   الإجمالي: ${money(o.total)} جنيه |
+   <span class="tag">${esc(o.status)}</span>
+   <button onclick="printInvoice(${o.id})">طباعة</button>
+   ${isManager()?`
+    <button class="orange" onclick="changeStatus(${o.id})">حالة الطلب</button>
+    <button class="dark" onclick="reopenOrder(${o.id})">إعادة فتح للكاشير</button>
+   `:''}
+  </div>
+ `).join('')||'لا توجد فواتير';
+}
+
+function changeStatus(id){
+ let o=orders.find(x=>x.id===id);
+
+ let s=prompt(
+  'اكتب الحالة: جديد، قيد التجهيز، جاهز للتوصيل، خرج للتوصيل، تم التسليم، ملغي',
+  o.status
+ );
+
+ if(s){
+  o.status=s;
   save();
   refresh();
  }
 }
 
-// تحديث البيانات
-function refresh(){
+function reopenOrder(id){
+ let o=orders.find(x=>x.id===id);
+ if(!o)return;
 
- const total=sales.reduce((a,s)=>a+s.total,0);
- const profit=sales.reduce((a,s)=>a+s.profit,0);
- const cost=total-profit;
+ let extra=prompt(
+  'إعادة فتح الفاتورة لإضافة منتجات. اكتب موافق للمتابعة'
+ );
 
- document.getElementById('total').textContent=money(total);
- document.getElementById('count').textContent=sales.length;
- document.getElementById('profit').textContent=money(profit);
- document.getElementById('stock').textContent=
-  products.reduce((a,p)=>a+p.qty,0);
+ if(extra!=='موافق')return;
 
- document.getElementById('rTotal').textContent=money(total);
- document.getElementById('rProfit').textContent=money(profit);
- document.getElementById('rCost').textContent=money(cost);
+ o.status='متوقف مؤقتًا';
+ o.editLog.push({
+  date:now(),
+  by:currentUser.fullname,
+  action:'إعادة فتح للمتابعة'
+ });
 
- document.getElementById('productList').innerHTML=
-  products.map(p=>
-   `<div class="item">
-   <b>${escapeHTML(p.name)}</b><br>
-   سعر الشراء: ${money(p.cost)} جنيه<br>
-   سعر البيع: ${money(p.price)} جنيه<br>
-   الكمية الحالية: <b>${p.qty}</b> قطعة
-   ${currentRole==='manager'?
-    `<button class="addStock" onclick="restockProduct(${p.id})">+ إضافة كمية للمخزون</button>
-    <button class="danger" onclick="deleteProduct(${p.id})">حذف المنتج</button>`
-    :''}
-   </div>`
-  ).join('')||'لا توجد منتجات';
+ save();
 
- document.getElementById('productSelect').innerHTML=
-  products.filter(p=>p.qty>0).map(p=>
-   `<option value="${p.id}">
-   ${escapeHTML(p.name)} - ${money(p.price)} جنيه (متاح ${p.qty})
-   </option>`
-  ).join('')||'<option value="">لا توجد منتجات متاحة</option>';
-
- document.getElementById('historyList').innerHTML=
-  [...sales].reverse().map(s=>
-   `<div class="item">
-   <b>${escapeHTML(s.name)}</b><br>
-   الكمية: ${s.qty}<br>
-   الإجمالي: ${money(s.total)} جنيه<br>
-   الدفع: ${escapeHTML(s.payment)}<br>
-   <span class="small">${escapeHTML(s.date)}</span>
-   </div>`
-  ).join('')||'لا توجد مبيعات';
+ alert('تم وضع الطلب متوقف مؤقتًا. أضف المنتجات كفاتورة جديدة مع الاحتفاظ برقم الفاتورة الأصلية في الملاحظات.');
+ refresh();
 }
 
-// حماية عرض النصوص
-function escapeHTML(value){
+// إضافة منتج
+function addProduct(){
+ if(!isManager())return;
 
- return String(value).replace(/[&<>"']/g,c=>({
-  '&':'&amp;',
-  '<':'&lt;',
-  '>':'&gt;',
-  '"':'&quot;',
-  "'":'&#39;'
- }[c]));
+ let name=$('pname').value.trim();
+ let cost=+$('pcost').value;
+ let price=+$('pprice').value;
+ let qty=+$('pqty').value;
+ let min=+$('pmin').value;
+ let barcode=$('pbarcode').value.trim();
 
-}
-
-// تحميل نسخة احتياطية
-function exportData(){
-
- if(currentRole!=='manager'){
-  alert('هذه الخاصية للمدير فقط');
-  return;
+ if(!name||cost<0||price<=0||
+    !Number.isInteger(qty)||qty<0||
+    !Number.isInteger(min)||min<0){
+  return alert('راجع بيانات المنتج');
  }
 
- const data={
+ if(barcode&&products.some(p=>p.barcode===barcode)){
+  return alert('الباركود مستخدم بالفعل');
+ }
+
+ products.push({
+  id:Date.now(),name,cost,price,qty,min,barcode,
+  pausedUntil:null
+ });
+
+ save();
+
+ ['pname','pcost','pprice','pqty','pmin','pbarcode']
+ .forEach(x=>$(x).value='');
+
+ refresh();
+}
+
+function deleteProduct(id){
+ if(isManager()&&confirm('حذف المنتج؟')){
+  products=products.filter(p=>p.id!==id);
+  save();
+  refresh();
+ }
+}
+
+function restock(id){
+ let p=products.find(x=>x.id===id);
+ let n=Number(prompt('كمية الإضافة؟'));
+
+ if(Number.isInteger(n)&&n>0){
+  p.qty+=n;
+  save();
+  refresh();
+ }
+}
+
+function pauseProduct(id){
+ let p=products.find(x=>x.id===id);
+ let h=Number(prompt('إيقاف المنتج كام ساعة؟'));
+
+ if(h>0){
+  p.pausedUntil=Date.now()+h*3600000;
+  save();
+  refresh();
+ }
+}
+
+function renderProducts(){
+ $('productList').innerHTML=products.map(p=>{
+  let paused=p.pausedUntil>Date.now();
+
+  return `
+   <div class="item product-row">
+    <b>${esc(p.name)}</b><br>
+    شراء ${money(p.cost)} |
+    بيع ${money(p.price)} |
+    كمية ${p.qty} |
+    حد أدنى ${p.min||0}<br>
+    باركود: ${esc(p.barcode||'—')}
+    ${paused?'<span class="tag">موقوف مؤقتًا</span>':''}
+
+    ${isManager()?`
+     <button onclick="restock(${p.id})">إضافة كمية</button>
+     <button onclick="pauseProduct(${p.id})">إيقاف مؤقت</button>
+     <button class="red" onclick="deleteProduct(${p.id})">حذف</button>
+    `:''}
+   </div>
+  `;
+ }).join('')||'لا توجد منتجات';
+
+ $('productSelect').innerHTML=products
+ .filter(p=>p.qty>0&&!(p.pausedUntil>Date.now()))
+ .map(p=>`
+  <option value="${p.id}">
+   ${esc(p.name)} — ${money(p.price)} (متاح ${p.qty})
+  </option>
+ `).join('')||'<option value="">لا توجد منتجات متاحة</option>';
+
+ $('lowStock').innerHTML=products
+ .filter(p=>p.qty<=(p.min||0))
+ .map(p=>'⚠️ '+esc(p.name)+' — المتبقي '+p.qty)
+ .join('<br>');
+}// أنواع تغليف الهدايا
+function addWrap(){
+ let name=$('wrapName').value.trim();
+ let price=+$('wrapPrice').value;
+
+ if(!name||price<0)return;
+
+ wrappings.push({name,price});
+ save();
+ renderWraps();
+}
+
+function renderWraps(){
+ $('wrapList').innerHTML=wrappings.map((w,i)=>`
+  <div class="item">
+   ${esc(w.name)} — ${money(w.price)} جنيه
+   <button onclick="cart.push({
+    productId:0,
+    name:'تغليف: ${esc(w.name)}',
+    qty:1,
+    price:${w.price},
+    cost:0,
+    note:''
+   });renderCart()">إضافة للفاتورة</button>
+  </div>
+ `).join('');
+}
+
+// سجل العملاء
+function renderCustomers(){
+ let q=($('customerSearch')?.value||'').trim();
+
+ $('customerList').innerHTML=Object.values(customers)
+ .filter(c=>!q||c.phone.includes(q)||c.code.includes(q))
+ .map(c=>{
+  let os=orders.filter(o=>o.customer?.phone===c.phone);
+
+  return `
+   <div class="item">
+    <b>${esc(c.name)}</b> | كود ${c.code}<br>
+    ${c.phone}<br>
+    عدد الطلبات: ${os.length} |
+    إجمالي المشتريات:
+    ${money(os.reduce((a,o)=>a+o.total,0))} جنيه<br>
+    آخر طلب: ${os.at(-1)?.date||'—'}
+   </div>
+  `;
+ }).join('')||'لا يوجد عملاء مطابقون';
+}
+
+// المندوبون
+function addRider(){
+ let name=$('riderName').value.trim();
+ let phone=$('riderPhone').value.trim();
+
+ if(!name||!phone)return;
+
+ riders.push({id:Date.now(),name,phone});
+ save();
+ renderDelivery();
+}
+
+function renderDelivery(){
+ $('riderList').innerHTML=riders.map(r=>`
+  <div class="item">
+   ${esc(r.name)} — ${esc(r.phone)}
+  </div>
+ `).join('');
+
+ $('deliveryList').innerHTML=orders
+ .filter(o=>o.type==='توصيل')
+ .map(o=>`
+  <div class="item">
+   #${o.invoiceNo} — ${esc(o.customer?.name||'')} —
+   ${money(o.total)} جنيه<br>
+   الحالة: ${esc(o.status)}
+
+   <select onchange="assignRider(${o.id},this.value)">
+    <option value="">اختيار مندوب</option>
+    ${riders.map(r=>`
+     <option value="${r.id}" ${o.riderId===r.id?'selected':''}>
+      ${esc(r.name)}
+     </option>
+    `).join('')}
+   </select>
+  </div>
+ `).join('')||'لا توجد طلبات توصيل';
+}
+
+function assignRider(id,v){
+ let o=orders.find(x=>x.id===id);
+ o.riderId=v?Number(v):null;
+ save();
+}
+
+// المصروفات
+function addExpense(){
+ let desc=$('expenseDesc').value.trim();
+ let amount=+$('expenseAmount').value;
+
+ if(!desc||amount<=0){
+  return alert('اكتب البيان والمبلغ');
+ }
+
+ expenses.push({
+  id:Date.now(),
+  desc,
+  amount,
+  date:now(),
+  user:currentUser.fullname
+ });
+
+ save();
+
+ $('expenseDesc').value='';
+ $('expenseAmount').value='';
+
+ renderExpenses();
+}
+
+function renderExpenses(){
+ $('expenseList').innerHTML=expenses
+ .filter(e=>isManager()||e.user===currentUser.fullname)
+ .slice().reverse()
+ .map(e=>`
+  <div class="item">
+   ${esc(e.desc)} — ${money(e.amount)} جنيه<br>
+   ${esc(e.user)} | ${esc(e.date)}
+  </div>
+ `).join('')||'لا توجد مصروفات';
+}
+
+// الورديات والخزنة
+function startShift(){
+ if(shifts.some(s=>s.user===currentUser.username&&!s.closed)){
+  return alert('لديك وردية مفتوحة بالفعل');
+ }
+
+ let opening=+$('openingCash').value||0;
+
+ shifts.push({
+  id:Date.now(),
+  user:currentUser.username,
+  name:currentUser.fullname,
+  start:now(),
+  opening,
+  closed:false
+ });
+
+ save();
+ renderShifts();
+}
+
+function closeShift(){
+ let s=[...shifts].reverse().find(
+  x=>x.user===currentUser.username&&!x.closed
+ );
+
+ if(!s)return alert('لا توجد وردية مفتوحة');
+
+ let actual=+$('actualCash').value;
+
+ let cashOrders=orders.filter(o=>
+  o.cashierUser===currentUser.username&&
+  new Date(o.id)>=new Date(s.id)&&
+  o.payment==='نقدي'
+ ).reduce((a,o)=>a+o.total,0);
+
+ let expected=s.opening+cashOrders;
+
+ s.actual=actual;
+ s.expected=expected;
+ s.diff=actual-expected;
+ s.closed=true;
+ s.end=now();
+
+ save();
+ renderShifts();
+
+ alert('تم تقفيل الوردية. الفرق: '+money(s.diff));
+}
+
+function renderShifts(){
+ $('shiftStatus').textContent=
+  shifts.some(s=>s.user===currentUser.username&&!s.closed)
+  ?'لديك وردية مفتوحة'
+  :'لا توجد وردية مفتوحة';
+
+ $('shiftList').innerHTML=shifts
+ .filter(s=>isManager()||s.user===currentUser.username)
+ .slice().reverse()
+ .map(s=>`
+  <div class="item">
+   ${esc(s.name)} |
+   بداية ${esc(s.start)} |
+   ${s.closed
+    ?'مقفولة — الفرق '+money(s.diff)+' جنيه'
+    :'مفتوحة'}
+  </div>
+ `).join('');
+}
+
+// إنشاء حسابات المستخدمين
+function createUser(){
+ if(!isManager())return;
+
+ let username=$('newUsername').value.trim();
+ let fullname=$('newFullname').value.trim();
+ let password=$('newUserPass').value;
+ let role=$('newUserRole').value;
+
+ if(!username||!fullname||password.length<4){
+  return alert('أدخل اسم مستخدم واسم موظف وكلمة مرور 4 أحرف على الأقل');
+ }
+
+ if(users.some(u=>u.username===username)){
+  return alert('اسم المستخدم موجود');
+ }
+
+ users.push({
+  username,
+  fullname,
+  password,
+  role,
+  active:true
+ });
+
+ save();
+ renderUsers();
+
+ ['newUsername','newFullname','newUserPass']
+ .forEach(x=>$(x).value='');
+}
+
+function renderUsers(){
+ $('userList').innerHTML=users.map((u,i)=>`
+  <div class="item">
+   <b>${esc(u.fullname)}</b> —
+   ${esc(u.username)} (${u.role}) —
+   ${u.active?'نشط':'موقوف'}
+
+   <div class="line">
+    <button onclick="resetUser(${i})">تغيير كلمة المرور</button>
+    <button class="orange" onclick="toggleUser(${i})">
+     ${u.active?'إيقاف':'تفعيل'}
+    </button>
+   </div>
+  </div>
+ `).join('');
+}
+
+function resetUser(i){
+ let p=prompt('كلمة المرور الجديدة (4 أحرف على الأقل)');
+
+ if(p&&p.length>=4){
+  users[i].password=p;
+  save();
+  alert('تم تغيير كلمة المرور');
+ }
+}
+
+function toggleUser(i){
+ if(users[i].username==='admin'){
+  return alert('لا يمكن إيقاف حساب المدير الأساسي');
+ }
+
+ users[i].active=!users[i].active;
+ save();
+ renderUsers();
+}
+
+// تغيير كلمة مرور الحساب الحالي
+function changeMyPassword(){
+ let old=$('oldPass').value;
+ let n=$('newPass').value;
+ let c=$('confirmPass').value;
+
+ if(old!==currentUser.password){
+  return alert('كلمة المرور الحالية غير صحيحة');
+ }
+
+ if(n.length<4||n!==c){
+  return alert('تأكد من كلمة المرور الجديدة (4 أحرف على الأقل)');
+ }
+
+ currentUser.password=n;
+
+ let u=users.find(x=>x.username===currentUser.username);
+ u.password=n;
+
+ save();
+ alert('تم تغيير كلمة المرور');
+}
+
+// تحديث كل البيانات
+function refresh(){
+ renderProducts();
+ renderCart();
+ renderHistory();
+ renderCustomers();
+ renderDelivery();
+ renderExpenses();
+ renderShifts();
+ renderUsers();
+
+ let mine=orders.filter(o=>
+  isManager()||o.cashierUser===currentUser.username
+ );
+
+ let total=mine.reduce((a,o)=>a+o.total,0);
+ let profit=mine.reduce((a,o)=>a+o.profit,0);
+
+ $('dSales').textContent=money(total);
+ $('dCount').textContent=mine.length;
+ $('dProfit').textContent=money(profit);
+
+ $('dStock').textContent=
+  products.reduce((a,p)=>a+p.qty,0);
+
+ let exp=expenses.reduce((a,e)=>a+e.amount,0);
+
+ $('reportContent').innerHTML=`
+  إجمالي المبيعات:
+  ${money(orders.reduce((a,o)=>a+o.total,0))} جنيه<br>
+
+  إجمالي التوصيل:
+  ${money(orders.reduce((a,o)=>a+o.fee,0))} جنيه<br>
+
+  إجمالي الضريبة:
+  ${money(orders.reduce((a,o)=>a+o.vat,0))} جنيه<br>
+
+  المصروفات:
+  ${money(exp)} جنيه<br>
+
+  الربح التقديري بعد المصروفات:
+  ${money(orders.reduce((a,o)=>a+o.profit,0)-exp)} جنيه
+ `;
+
+ $('cashierPerformance').innerHTML=
+  [...new Set(orders.map(o=>o.cashier))]
+  .map(n=>{
+   let a=orders.filter(o=>o.cashier===n);
+
+   return `
+    ${esc(n)}:
+    ${a.length} فاتورة —
+    ${money(a.reduce((s,o)=>s+o.total,0))} جنيه
+   `;
+  }).join('<br>');
+
+ renderWraps();
+}
+
+// النسخة الاحتياطية
+function exportData(){
+ if(!isManager()){
+  return alert('للمدير فقط');
+ }
+
+ let data={
   products,
-  sales,
-  passwords,
-  exportedAt:new Date().toISOString()
+  orders,
+  users,
+  customers,
+  riders,
+  expenses,
+  shifts,
+  wrappings,
+  invoiceSeq,
+  legacySales
  };
 
- const blob=new Blob(
+ let blob=new Blob(
   [JSON.stringify(data,null,2)],
   {type:'application/json'}
  );
 
- const url=URL.createObjectURL(blob);
- const a=document.createElement('a');
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement('a');
 
  a.href=url;
  a.download='Giftora-Backup.json';
@@ -599,7 +1215,60 @@ function exportData(){
  URL.revokeObjectURL(url);
 }
 
-</script>
+// استعادة النسخة الاحتياطية
+function restoreData(){
+ if(!isManager())return;
 
+ let f=$('restoreFile').files[0];
+
+ if(!f)return alert('اختر ملف النسخة');
+
+ let r=new FileReader();
+
+ r.onload=()=>{
+  try{
+   let d=JSON.parse(r.result);
+
+   if(!confirm('سيتم استبدال البيانات الحالية بالنسخة. هل أنت متأكد؟')){
+    return;
+   }
+
+   products=d.products||[];
+   orders=d.orders||[];
+   users=d.users||users;
+   customers=d.customers||{};
+   riders=d.riders||[];
+   expenses=d.expenses||[];
+   shifts=d.shifts||[];
+   wrappings=d.wrappings||[];
+   invoiceSeq=d.invoiceSeq||0;
+
+   save();
+   refresh();
+
+   alert('تمت الاستعادة');
+  }catch(e){
+   alert('ملف النسخة غير صالح');
+  }
+ };
+
+ r.readAsText(f);
+}
+
+// حماية النصوص
+function esc(s){
+ return String(s??'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+ }[c]));
+}
+
+$('orderType').addEventListener('change',toggleDelivery);
+$('deliveryFee').addEventListener('change',renderCart);
+
+</script>
 </body>
 </html>
