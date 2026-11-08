@@ -1,1 +1,172 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<meta name="description" content="Giftora Point of Sale">
+<link rel="manifest" href="./manifest.json">
+<title>Giftora POS</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif}
+header{background:#1b1b1b;padding:22px;text-align:center;border-bottom:2px solid #c9a34a}
+h1{color:#d6b45b;margin:0;font-size:30px}
+header p{color:#aaa;margin-bottom:0}
+main{max-width:900px;margin:auto;padding:15px}
+.card{background:#202020;border:1px solid #444;border-radius:12px;padding:15px;margin:12px 0}
+h2,h3{color:#d6b45b}
+input,select,button{width:100%;padding:13px;margin:6px 0;border-radius:7px;font-size:15px}
+input,select{background:#292929;color:white;border:1px solid #555}
+button{background:#c9a34a;color:#111;border:0;font-weight:bold;cursor:pointer}
+.secondary{background:#444;color:white}
+.danger{background:#a33;color:white}
+nav{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#292929;padding:15px;border-radius:10px;text-align:center}
+.stat strong{display:block;color:#e3bd60;font-size:21px;margin-top:8px}
+.hidden{display:none!important}
+.small{color:#aaa;font-size:12px}
+.item{padding:12px;border-bottom:1px solid #444;line-height:1.8}
+</style>
+</head>
+<body>
+<header><h1>GIFTORA</h1><p>POINT OF SALE • SALES & INVENTORY</p></header>
+<main>
+<section id="login" class="card">
+<h2>تسجيل الدخول</h2>
+<select id="role"><option value="manager">مدير الفرع</option><option value="cashier">كاشير</option></select>
+<input id="pin" type="password" placeholder="الرقم السري">
+<button onclick="login()">دخول</button>
+<p class="small">المدير: 1234 | الكاشير: 0000</p>
+</section>
+<section id="app" class="hidden">
+<div class="card"><span id="welcome"></span><button class="secondary" onclick="logout()">تسجيل الخروج</button></div>
+<nav>
+<button onclick="show('dashboard')">الرئيسية</button><button onclick="show('sales')">المبيعات</button>
+<button onclick="show('products')">المنتجات</button><button onclick="show('history')">الفواتير</button>
+<button onclick="show('reports')">التقارير</button><button onclick="show('settings')">الإعدادات</button>
+</nav>
+<section id="dashboard" class="card page"><h2>لوحة التحكم</h2>
+<div class="stats">
+<div class="stat">إجمالي المبيعات<strong id="total">0</strong></div>
+<div class="stat">عدد الفواتير<strong id="count">0</strong></div>
+<div class="stat">صافي الربح<strong id="profit">0</strong></div>
+<div class="stat">المنتجات<strong id="stock">0</strong></div>
+</div></section>
+<section id="products" class="card page hidden"><h2>إدارة المنتجات</h2>
+<div id="addProduct">
+<input id="pname" placeholder="اسم المنتج"><input id="pcost" type="number" min="0" placeholder="سعر الشراء">
+<input id="pprice" type="number" min="0" placeholder="سعر البيع"><input id="pqty" type="number" min="0" placeholder="الكمية">
+<button onclick="addProduct()">إضافة منتج</button></div><div id="productList"></div></section>
+<section id="sales" class="card page hidden"><h2>فاتورة بيع جديدة</h2>
+<select id="productSelect"></select><input id="saleQty" type="number" min="1" value="1" placeholder="الكمية">
+<select id="payment"><option>نقدي</option><option>بطاقة بنكية</option><option>محفظة إلكترونية</option><option>إنستا باي</option></select>
+<button onclick="sell()">إتمام البيع</button><p id="saleMessage"></p></section>
+<section id="history" class="card page hidden"><h2>سجل الفواتير</h2><div id="historyList"></div></section>
+<section id="reports" class="card page hidden"><h2>التقارير</h2>
+<p>المبيعات: <strong id="rTotal">0</strong> جنيه</p><p>التكلفة: <strong id="rCost">0</strong> جنيه</p>
+<p>الربح: <strong id="rProfit">0</strong> جنيه</p></section>
+<section id="settings" class="card page hidden"><h2>الإعدادات</h2>
+<button onclick="exportData()">تحميل نسخة احتياطية</button><p class="small">احتفظ بنسخة احتياطية من بياناتك بانتظام.</p></section>
+</section></main>
+<script>
+let products=JSON.parse(localStorage.getItem('giftora_products')||'[]');
+let sales=JSON.parse(localStorage.getItem('giftora_sales')||'[]');
+let currentRole='';
+const money=n=>(Number(n)||0).toFixed(2);
+function save(){
+ localStorage.setItem('giftora_products',JSON.stringify(products));
+ localStorage.setItem('giftora_sales',JSON.stringify(sales));
+}
+function login(){
+ const role=document.getElementById('role').value;
+ const pin=document.getElementById('pin').value;
+ if((role==='manager'&&pin==='1234')||(role==='cashier'&&pin==='0000')){
+  currentRole=role;
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('welcome').textContent=role==='manager'?'أهلاً مدير Giftora':'أهلاً كاشير Giftora';
+  document.getElementById('addProduct').style.display=role==='manager'?'block':'none';
+  refresh();show('dashboard');
+ }else alert('الرقم السري غير صحيح');
+}
+function logout(){
+ currentRole='';
+ document.getElementById('app').classList.add('hidden');
+ document.getElementById('login').classList.remove('hidden');
+ document.getElementById('pin').value='';
+}
+function show(id){
+ document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ refresh();
+}
+function addProduct(){
+ if(currentRole!=='manager')return;
+ const name=document.getElementById('pname').value.trim();
+ const cost=Number(document.getElementById('pcost').value);
+ const price=Number(document.getElementById('pprice').value);
+ const qty=Number(document.getElementById('pqty').value);
+ if(!name||!Number.isFinite(cost)||!Number.isFinite(price)||!Number.isInteger(qty)||cost<0||price<=0||qty<0){
+  alert('راجع بيانات المنتج');return;
+ }
+ products.push({id:Date.now(),name,cost,price,qty});save();
+ ['pname','pcost','pprice','pqty'].forEach(id=>document.getElementById(id).value='');
+ refresh();alert('تم إضافة المنتج');
+}
+function sell(){
+ const id=Number(document.getElementById('productSelect').value);
+ const qty=Number(document.getElementById('saleQty').value);
+ const p=products.find(x=>x.id===id);
+ if(!p||!Number.isInteger(qty)||qty<1){alert('اختر منتجاً وكمية صحيحة');return;}
+ if(p.qty<qty){alert('الكمية غير متوفرة بالمخزون');return;}
+ p.qty-=qty;
+ sales.push({date:new Date().toLocaleString('ar-EG'),name:p.name,qty,price:p.price,cost:p.cost,
+ payment:document.getElementById('payment').value,total:p.price*qty,profit:(p.price-p.cost)*qty});
+ save();document.getElementById('saleMessage').textContent='تم تسجيل البيع بنجاح';refresh();
+}
+function deleteProduct(id){
+ if(currentRole!=='manager')return;
+ if(confirm('هل تريد حذف المنتج؟')){
+  products=products.filter(x=>x.id!==id);save();refresh();
+ }
+}
+function refresh(){
+ const total=sales.reduce((a,s)=>a+s.total,0);
+ const profit=sales.reduce((a,s)=>a+s.profit,0);
+ const cost=total-profit;
+ document.getElementById('total').textContent=money(total);
+ document.getElementById('count').textContent=sales.length;
+ document.getElementById('profit').textContent=money(profit);
+ document.getElementById('stock').textContent=products.reduce((a,p)=>a+p.qty,0);
+ document.getElementById('rTotal').textContent=money(total);
+ document.getElementById('rProfit').textContent=money(profit);
+ document.getElementById('rCost').textContent=money(cost);
+ document.getElementById('productList').innerHTML=products.map(p=>
+  `<div class="item"><b>${escapeHTML(p.name)}</b><br>سعر الشراء: ${money(p.cost)} جنيه<br>سعر البيع: ${money(p.price)} جنيه<br>الكمية: ${p.qty}
+  ${currentRole==='manager'?`<button class="danger" onclick="deleteProduct(${p.id})">حذف المنتج</button>`:''}</div>`
+ ).join('')||'لا توجد منتجات';
+ document.getElementById('productSelect').innerHTML=products.filter(p=>p.qty>0).map(p=>
+  `<option value="${p.id}">${escapeHTML(p.name)} - ${money(p.price)} جنيه (متاح ${p.qty})</option>`
+ ).join('')||'<option value="">لا توجد منتجات متاحة</option>';
+ document.getElementById('historyList').innerHTML=[...sales].reverse().map(s=>
+  `<div class="item"><b>${escapeHTML(s.name)}</b><br>الكمية: ${s.qty}<br>الإجمالي: ${money(s.total)} جنيه<br>الدفع: ${escapeHTML(s.payment)}<br><span class="small">${escapeHTML(s.date)}</span></div>`
+ ).join('')||'لا توجد مبيعات';
+}
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function exportData(){
+ if(currentRole!=='manager'){alert('هذه الخاصية للمدير فقط');return;}
+ const data={products,sales,exportedAt:new Date().toISOString()};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='Giftora-Backup.json';a.click();
+ URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
+
